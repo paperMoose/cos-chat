@@ -3,6 +3,8 @@ import { useCallback, useState } from "react";
 import { useQuery } from "@apollo/client";
 import axios from "axios";
 import { useEffect } from "react";
+import { apiUrl, webappUrl } from "../utils/urls";
+import { useNavigate } from "react-router-dom";
 
 export const CURRENT_USER_QUERY = gql`
   query CommonQueryCurrentUser {
@@ -57,22 +59,21 @@ export const useAuth = () => {
   const isLoggedIn = Boolean(data?.currentUser);
   const currentUser = data?.currentUser || null;
 
-  // Logout logic
-  const logout = useCallback(() => {
-    // Construct URLs using the root URL from the environment variable
-    const logoutUrl = `${
-      process.env.NEXT_PUBLIC_AUTH_SERVER_DOMAIN ||
-      "https://app.localtest.local:3000"
-    }/api/auth/logout/`;
+  const logout = useCallback(async () => {
+    try {
+      // Use utility functions to construct URLs
+      const logoutUrl = apiUrl("/api/auth/logout/");
+      const loginUrl = webappUrl("/en/auth/login");
 
-    const loginUrl = `${
-      process.env.NEXT_PUBLIC_WEBAPP_URL || "https://app.localtest.local:3000"
-    }/en/auth/login`;
+      // Perform logout operations and wait for them to complete
+      await client.post<void>(logoutUrl);
 
-    // Perform logout operations
-    client.post<void>(logoutUrl);
-    window.location.href = loginUrl;
-  }, []);
+      window.location.href = loginUrl;
+    } catch (error) {
+      console.error("Logout failed:", error);
+      // Handle logout error (e.g., show a message to the user)
+    }
+  }, []); // Add navigate to the dependency array if you're using react-router-dom
 
   useEffect(() => {
     if (!loading) {
