@@ -5,7 +5,7 @@ import {
   HistoryChatEngine,
   IndexDict,
   OpenAI,
-  Anyscale,
+  // Anyscale,
   ServiceContext,
   SimpleChatHistory,
   SummaryChatHistory,
@@ -152,12 +152,12 @@ export async function POST(request: NextRequest) {
       topP: config.topP,
       maxTokens: config.maxTokens,
     });
-    const llm = new Anyscale({
-      model: config.model,
-      temperature: config.temperature,
-      topP: config.topP,
-      maxTokens: config.maxTokens,
-    });
+    // const llm = new Anyscale({
+    //   model: config.model,
+    //   temperature: config.temperature,
+    //   topP: config.topP,
+    //   maxTokens: config.maxTokens,
+    // });
 
     const serviceContext = serviceContextFromDefaults({
       llm,

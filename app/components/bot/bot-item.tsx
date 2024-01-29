@@ -17,9 +17,9 @@ function BotItemUI() {
         className="flex items-center space-x-2 w-full p-4 pr-12"
         onClick={ensureSession}
       >
-        <div className="w-[18px] h-[18px]">
+        {/* <div className="w-[18px] h-[18px]">
           <BotAvatar avatar={bot.avatar} />
-        </div>
+        </div> */}
         <div className="font-medium">{bot.name}</div>
       </div>
       <div className="absolute right-4 top-1/2 transform -translate-y-1/2">

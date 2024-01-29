@@ -133,7 +133,7 @@ const en = {
 
   Welcome: {
     Title: "ChatOpenSource",
-    SubTitle: "Create chat bots that know your data",
+    SubTitle: "AI Chat done securely 🔐",
     Quote:
       "“This tool has saved me countless hours of work and helped me apply AI features to my work faster than ever before.”",
     LoginLinkedinTitle: "Login with LinkedIn",

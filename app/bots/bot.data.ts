@@ -70,7 +70,7 @@ const TEMPLATE = (PERSONA: string) =>
 
 const DEMO_BOTS: Omit<Bot, "id" | "session">[] = [
   {
-    avatar: "1f916",
+    avatar: "1f5a5-fe0f",
     name: "My Documents",
     botHello: "Hello! How can I assist you today?",
     context: [],
@@ -84,7 +84,7 @@ const DEMO_BOTS: Omit<Bot, "id" | "session">[] = [
     hideContext: false,
   },
   {
-    avatar: "1f4da",
+    avatar: "1f5a5-fe0f",
     name: "Crowell and Moring Memo expert",
     botHello: "Hello! How can I assist you today?",
     context: [
@@ -142,7 +142,7 @@ export const createDemoBots = (): Record<string, Bot> => {
 
 export const createEmptyBot = (): Bot => ({
   id: nanoid(),
-  avatar: "1f916",
+  avatar: "1f5a5-fe0f",
   name: Locale.Store.DefaultBotName,
   context: [],
   modelConfig: {

@@ -24,6 +24,7 @@ import { usePaidSubscription } from "../hooks/usePaidSubscription";
 import { RedirectLoadingPage } from "./ui/redirect-loading";
 import { useAuth } from "../hooks/useAuth";
 import { webappUrl } from "../utils/urls";
+import { useCurrentUserOrganization } from "../hooks/useCurrentUserOrganization";
 const SettingsPage = dynamic(
   async () => (await import("./settings")).Settings,
   {
@@ -141,32 +142,42 @@ export const useAuthContext = () => {
 function Screen() {
   const isMobileScreen = useMobileScreen();
   const { showSidebar } = useSidebarContext();
-  const { hasPaidSubscription, loading: loadingSubscription } =
-    usePaidSubscription();
-  const [checkCompleted, setCheckCompleted] = useState(false);
+  // const { hasPaidSubscription, loading: loadingSubscription } =
+  //   usePaidSubscription();
+  // const [checkCompleted, setCheckCompleted] = useState(false);
+  const { currentUserOrganization, loading: loadingOrganization } =
+    useCurrentUserOrganization();
+
+  const [orgCheckCompleted, setOrgCheckCompleted] = useState(false);
 
   useEffect(() => {
-    if (!loadingSubscription) {
-      setCheckCompleted(true);
+    if (!loadingOrganization) {
+      setOrgCheckCompleted(true);
     }
-  }, [loadingSubscription]);
+  }, [loadingOrganization]);
+
+  // useEffect(() => {
+  //   if (!loadingSubscription) {
+  //     setCheckCompleted(true);
+  //   }
+  // }, [loadingSubscription]);
 
   useEffect(() => {
     loadAsyncGoogleFont();
   }, []);
 
-  if (!checkCompleted) {
+  if (!orgCheckCompleted) {
     return <LoadingPage />;
   }
 
-  const subscriptionUrl = webappUrl("/en/");
+  const homePageRedirectUrl = webappUrl("/en/");
 
-  if (!hasPaidSubscription) {
-    console.log("Redirecting to subscription page");
+  if (!currentUserOrganization) {
+    console.log("Redirecting to home page");
     return (
       <RedirectLoadingPage
-        url={subscriptionUrl}
-        message="Requires a paid subscription to use, please contact support at ryan@chatopensource.com ."
+        url={homePageRedirectUrl}
+        message="You must belong to an organization, please contact support at ryan@chatopensource.com."
       />
     );
   }
