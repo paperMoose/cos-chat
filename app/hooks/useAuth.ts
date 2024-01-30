@@ -40,10 +40,7 @@ export const client = axios.create({
 });
 
 export const refreshToken = async () => {
-  const refreshUrl = `${
-    process.env.NEXT_PUBLIC_AUTH_SERVER_DOMAIN ||
-    "https://app.localtest.local:3000"
-  }/api/auth/token-refresh/`;
+  const refreshUrl = apiUrl("/api/auth/token-refresh/");
   const res = await client.post<void>(refreshUrl);
   return res.data;
 };
