@@ -9,7 +9,7 @@ import dynamic from "next/dynamic";
 import { Path } from "../constant";
 import { ErrorBoundary } from "./layout/error";
 import { ApolloProvider } from "@apollo/client";
-import { apolloClient } from "../client/graphql/apollo";
+import { apolloClient } from "../utils/graphql/apollo";
 
 import {
   Route,

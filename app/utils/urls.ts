@@ -1,4 +1,7 @@
 function getCookie(name: string): string | undefined {
+  if (typeof window === "undefined") {
+    return undefined; // or handle the server-side scenario
+  }
   const value = `; ${document.cookie}`;
   const parts = value.split(`; ${name}=`);
   if (parts.length === 2) {
@@ -23,6 +26,6 @@ export const apiUrl = (path: string): string => {
   const env = getCookie("environment"); // Use the 'environment' cookie
   const authDomain = env
     ? `https://api.${env}.chatopensource.com`
-    : "https://api.localtest.local:3000"; // Fallback URL if the cookie isn't set or is empty
+    : "https://app.localtest.local:3000"; // Fallback URL if the cookie isn't set or is empty
   return `${authDomain}${path}`;
 };

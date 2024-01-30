@@ -2,11 +2,12 @@ import { ThemeToggle } from "@/app/components/layout/theme-toggle";
 import { Github, Settings } from "lucide-react";
 import dynamic from "next/dynamic";
 import { useNavigate } from "react-router-dom";
-import { GITHUB_URL, Path } from "../../constant";
+import { Path } from "../../constant";
 import Locale from "../../locales";
 import { Button } from "../ui/button";
 import { useSidebarContext } from "@/app/components/home";
 import { useTheme } from "next-themes";
+import { webappUrl } from "@/app/utils/urls";
 
 const BotList = dynamic(async () => (await import("../bot/bot-list")).default, {
   loading: () => null,
@@ -25,7 +26,7 @@ export function SideBar(props: { className?: string }) {
           <div className="mb-5 flex items-center justify-between gap-5">
             <div>
               {" "}
-              <a href={process.env.NEXT_PUBLIC_WEBAPP_URL}>
+              <a href={webappUrl("")}>
                 <img src={logoSrc} alt="Image" />
               </a>
               <div>

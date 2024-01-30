@@ -5,15 +5,12 @@ import { Embedding } from "@/app/client/fetch/url";
 import {
   ChatHistory,
   ChatMessage,
-  DefaultContextGenerator,
-  HistoryChatEngine,
   IndexDict,
   ServiceContext,
   SimpleChatHistory,
   TextNode,
   VectorStoreIndex,
 } from "llamaindex";
-import { getDataSource } from "./datasource";
 
 async function createIndex(
   serviceContext: ServiceContext,
@@ -125,6 +122,8 @@ export async function POST(request: NextRequest) {
     });
 
     // Generate response using OpenAI
+    console.log(config.model);
+    console.log(config);
     const stream = await openai.chat.completions.create({
       model: config.model,
       messages: [

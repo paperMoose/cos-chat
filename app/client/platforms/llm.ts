@@ -23,6 +23,7 @@ export const ALL_MODELS = [
   "gpt-3.5-turbo",
   "gpt-3.5-turbo-16k",
   "gpt-4-1106-preview",
+  // "meta-llama/Llama-2-70b-chat-hf"
 ] as const;
 
 export type ModelType = (typeof ALL_MODELS)[number];
@@ -97,6 +98,7 @@ export class LLMApi {
           }
         },
         onmessage(msg) {
+          debugger;
           try {
             const json = JSON.parse(msg.data);
             if (json.done) {
@@ -106,6 +108,7 @@ export class LLMApi {
             } else {
               // received a new token
               llmResponse += json;
+              debugger;
               options.onUpdate(llmResponse);
             }
           } catch (e) {

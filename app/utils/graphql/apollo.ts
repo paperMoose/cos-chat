@@ -1,10 +1,11 @@
+import { apiUrl } from "@/app/utils/urls";
 import { ApolloClient, InMemoryCache, HttpLink } from "@apollo/client";
 
 const createApolloClient = () => {
   return new ApolloClient({
     ssrMode: typeof window === "undefined",
     link: new HttpLink({
-      uri: `${process.env.NEXT_PUBLIC_AUTH_SERVER_DOMAIN}/api/graphql/`, // Replace with your GraphQL endpoint
+      uri: apiUrl("/api/graphql/"), // Use apiUrl to construct the GraphQL endpoint URL
       credentials: "include",
     }),
     cache: new InMemoryCache(),

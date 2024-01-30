@@ -27,7 +27,7 @@ export default function BotList() {
   const onClickCreate = () => {
     const newBot = botStore.create();
     botStore.selectBot(newBot.id);
-    setEditBotId(newBot.id);
+    // setEditBotId(newBot.id);
   };
 
   const allBots = botStore.getAll();

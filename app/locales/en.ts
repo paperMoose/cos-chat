@@ -104,7 +104,7 @@ const en = {
     Name: "Bot",
     Page: {
       Search: (count: number) => `Search Bot - ${count} bots`,
-      Create: "Create bot",
+      Create: "Create Conversation",
     },
     Item: {
       Edit: "Edit",

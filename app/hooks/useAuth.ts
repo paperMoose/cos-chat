@@ -39,16 +39,16 @@ export const client = axios.create({
   validateStatus,
 });
 
-export const refreshToken = async () => {
-  const refreshUrl = apiUrl("/api/auth/token-refresh/");
-  const res = await client.post<void>(refreshUrl);
-  return res.data;
-};
+// export const refreshToken = async () => {
+//   const refreshUrl = apiUrl("/api/auth/token-refresh/");
+//   const res = await client.post<void>(refreshUrl);
+//   return res.data;
+// };
 
 export const useAuth = () => {
   const { data, loading, error, refetch } = useQuery(CURRENT_USER_QUERY, {
     onError: (apolloError) => {
-      refreshToken();
+      // refreshToken();
     },
   });
 
