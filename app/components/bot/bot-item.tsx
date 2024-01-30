@@ -2,7 +2,6 @@ import { cn } from "@/app/lib/utils";
 import { Bot } from "../../store/bot";
 import BotOptions from "./bot-options";
 import { BotItemContextProvider, useBot } from "./use-bot";
-import { BotAvatar } from "@/app/components/ui/emoji";
 
 function BotItemUI() {
   const { bot, isActive, ensureSession } = useBot();

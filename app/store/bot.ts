@@ -11,7 +11,6 @@ export type Share = {
 
 export type Bot = {
   id: string;
-  avatar: string;
   name: string;
   hideContext: boolean;
   context: ChatMessage[];
@@ -57,20 +56,56 @@ export const useBotStore = create<BotStore>()(
   persist(
     (set, get) => ({
       bots: demoBots,
-      currentBotId: Object.values(demoBots)[0].id,
-
+      currentBotId:
+        Object.keys(demoBots).length > 0
+          ? Object.values(demoBots)[0].id
+          : "empty",
       currentBot() {
-        return get().bots[get().currentBotId];
+        const bots = get().bots;
+        const currentBotId = get().currentBotId;
+
+        // If no bots are available, return an empty or default bot
+        if (Object.keys(bots).length === 0) {
+          return createEmptyBot();
+        }
+
+        // If currentBotId is "empty" and there are bots available, select the first bot
+        if (currentBotId === "empty" && Object.keys(bots).length > 0) {
+          const firstBotId = Object.keys(bots)[0];
+          return bots[firstBotId];
+        }
+
+        // Return the bot with the currentBotId
+        return bots[currentBotId];
       },
       selectBot(id) {
         set(() => ({ currentBotId: id }));
       },
       currentSession() {
-        return get().currentBot().session;
+        const currentBot = get().currentBot();
+        if (!currentBot) {
+          // If currentBot is undefined, return a default or empty session
+          return createEmptySession();
+        }
+        return currentBot.session;
       },
       updateBotSession(updater, botId) {
         const bots = get().bots;
-        updater(bots[botId].session);
+        let bot = bots[botId];
+
+        if (!bot) {
+          // If the bot doesn't exist, create a new one
+          const newBot = {
+            ...createEmptyBot(), // Assuming this function creates a new empty bot
+            id: botId, // Use the provided botId for the new bot
+            session: createEmptySession(), // Assuming this function creates a new empty session
+          };
+          bots[botId] = newBot;
+          bot = newBot;
+        }
+
+        // Update the session of the bot
+        updater(bot.session);
         set(() => ({ bots }));
       },
       get(id) {

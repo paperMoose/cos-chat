@@ -172,15 +172,15 @@ function Screen() {
 
   const homePageRedirectUrl = webappUrl("/en/");
 
-  if (!currentUserOrganization) {
-    console.log("Redirecting to home page");
-    return (
-      <RedirectLoadingPage
-        url={homePageRedirectUrl}
-        message="You must belong to an organization, please contact support at ryan@chatopensource.com."
-      />
-    );
-  }
+  // if (!currentUserOrganization) {
+  //   console.log("Redirecting to home page");
+  //   return (
+  //     <RedirectLoadingPage
+  //       url={homePageRedirectUrl}
+  //       message="You must belong to an organization, please contact support at ryan@chatopensource.com."
+  //     />
+  //   );
+  // }
 
   const showSidebarOnMobile = showSidebar || !isMobileScreen;
 

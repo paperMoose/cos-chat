@@ -51,14 +51,14 @@ export function SideBar(props: { className?: string }) {
             <Settings className="h-4 w-4" />
           </Button>
 
-          <Button
+          {/* <Button
             variant="outline"
             size="sm"
             onClick={() => window.open(GITHUB_URL, "_blank")}
           >
             <Github className="mr-2 h-4 w-4" />
             <span>{Locale.Home.Github}</span>
-          </Button>
+          </Button> */}
         </div>
       </div>
     </div>

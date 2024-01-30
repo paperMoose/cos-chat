@@ -147,6 +147,7 @@ function ChatHeader() {
 export function Chat() {
   const { toast } = useToast();
   const botStore = useBotStore();
+  debugger;
   const bot = botStore.currentBot();
   const session = botStore.currentSession();
 
@@ -270,8 +271,12 @@ export function Chat() {
   };
 
   const context: ChatMessage[] = useMemo(() => {
+    // Ensure bot is defined before trying to access its properties
+    if (!bot) {
+      return []; // Return an empty array if bot is undefined
+    }
     return bot.hideContext ? [] : bot.context.slice();
-  }, [bot.context, bot.hideContext]);
+  }, [bot?.context, bot?.hideContext]); // Use optional chaining
 
   const getUrlTypePrefix = (type: string) => {
     if (type === "text/html") return "HTML";

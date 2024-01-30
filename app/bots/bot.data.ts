@@ -68,66 +68,7 @@ const TEMPLATE = (PERSONA: string) =>
 //   hideContext: false,
 // },
 
-const DEMO_BOTS: Omit<Bot, "id" | "session">[] = [
-  {
-    avatar: "1f5a5-fe0f",
-    name: "My Documents",
-    botHello: "Hello! How can I assist you today?",
-    context: [],
-    modelConfig: {
-      model: "gpt-3.5-turbo-16k",
-      temperature: 0.5,
-      maxTokens: 4000,
-      sendMemory: true,
-    },
-    readOnly: true,
-    hideContext: false,
-  },
-  {
-    avatar: "1f5a5-fe0f",
-    name: "Crowell and Moring Memo expert",
-    botHello: "Hello! How can I assist you today?",
-    context: [
-      {
-        role: "system",
-        content: TEMPLATE(
-          "Lawyer specialized the memos available on Crowell and Moring's website",
-        ),
-      },
-    ],
-    modelConfig: {
-      model: "gpt-3.5-turbo-16k",
-      temperature: 0.1,
-      maxTokens: 4000,
-      sendMemory: true,
-    },
-    readOnly: true,
-    datasource: "crowell_moring",
-    hideContext: false,
-  },
-  {
-    avatar: "1f5a5-fe0f",
-    name: "CA Residential Real Estate Law Expert",
-    botHello: "Hello! How can I assist you today?",
-    context: [
-      {
-        role: "system",
-        content: TEMPLATE(
-          "Lawyer specialized in the disclosure requirements for californian residential real estate.",
-        ),
-      },
-    ],
-    modelConfig: {
-      model: "gpt-3.5-turbo-16k",
-      temperature: 0.1,
-      maxTokens: 4000,
-      sendMemory: true,
-    },
-    readOnly: true,
-    datasource: "us_law",
-    hideContext: false,
-  },
-];
+const DEMO_BOTS: Omit<Bot, "id" | "session">[] = [];
 
 export const createDemoBots = (): Record<string, Bot> => {
   const map: Record<string, Bot> = {};
@@ -142,7 +83,6 @@ export const createDemoBots = (): Record<string, Bot> => {
 
 export const createEmptyBot = (): Bot => ({
   id: nanoid(),
-  avatar: "1f5a5-fe0f",
   name: Locale.Store.DefaultBotName,
   context: [],
   modelConfig: {
