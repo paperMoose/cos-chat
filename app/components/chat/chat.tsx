@@ -147,7 +147,6 @@ function ChatHeader() {
 export function Chat() {
   const { toast } = useToast();
   const botStore = useBotStore();
-  debugger;
   const bot = botStore.currentBot();
   const session = botStore.currentSession();
 
@@ -549,7 +548,7 @@ export function Chat() {
             autoFocus={autoFocus}
           />
           <div className="my-2 flex items-center gap-2.5 absolute right-[35px]">
-            <FileUploader
+            {/* <FileUploader
               config={{
                 inputId: "document-uploader",
                 allowedExtensions: ALLOWED_DOCUMENT_EXTENSIONS,
@@ -558,7 +557,8 @@ export function Chat() {
               }}
               onUpload={doSubmitFile}
               onError={showError}
-            />
+            /> */}
+            {/* will add back when I make the embeddings better and safer */}
             {isMobileScreen ? (
               <Button
                 size="icon"

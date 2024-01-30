@@ -67,19 +67,19 @@ const en = {
     },
     Backup: {
       Download: {
-        Title: "Backup Bots",
+        Title: "Backup Conversations",
         SutTitle: "Download the state of your bots to a JSON file",
       },
       Upload: {
-        Title: "Restore Bots",
-        SutTitle: "Upload the state of your bots from a JSON file",
-        Success: "Successfully restored the bots from the JSON file",
+        Title: "Restore Conversations",
+        SutTitle: "Upload the state of your conversations from a JSON file",
+        Success: "Successfully restored the conversations from the JSON file",
         Failed: (e: string) => `Error importing the JSON file: ${e}`,
       },
     },
   },
   Store: {
-    DefaultBotName: "New Bot",
+    DefaultBotName: "New Conversation",
     BotHello: "Hello! How can I assist you today?",
   },
   Copy: {
@@ -113,7 +113,7 @@ const en = {
       Share: "Share",
     },
     EditModal: {
-      Title: `Edit Bot`,
+      Title: `Change Conversation Settings`,
       Clone: "Clone",
     },
     Config: {
@@ -127,7 +127,7 @@ const en = {
         Title: "Welcome Message",
         SubTitle: "Welcome message sent when starting a new chat",
       },
-      Title: "Bot Settings",
+      Title: "Conversation Settings",
     },
   },
 

@@ -20,7 +20,6 @@ import {
 import { Bot, useBotStore } from "../store/bot";
 import { SideBar } from "./layout/sidebar";
 import { LoadingPage } from "@/app/components/ui/loading";
-import { usePaidSubscription } from "../hooks/usePaidSubscription";
 import { RedirectLoadingPage } from "./ui/redirect-loading";
 import { useAuth } from "../hooks/useAuth";
 import { webappUrl } from "../utils/urls";
@@ -172,15 +171,15 @@ function Screen() {
 
   const homePageRedirectUrl = webappUrl("/en/");
 
-  // if (!currentUserOrganization) {
-  //   console.log("Redirecting to home page");
-  //   return (
-  //     <RedirectLoadingPage
-  //       url={homePageRedirectUrl}
-  //       message="You must belong to an organization, please contact support at ryan@chatopensource.com."
-  //     />
-  //   );
-  // }
+  if (!currentUserOrganization) {
+    console.log("Redirecting to home page");
+    return (
+      <RedirectLoadingPage
+        url={homePageRedirectUrl}
+        message="You must belong to an organization, please contact support at ryan@chatopensource.com."
+      />
+    );
+  }
 
   const showSidebarOnMobile = showSidebar || !isMobileScreen;
 

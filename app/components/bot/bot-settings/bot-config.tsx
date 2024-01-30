@@ -19,20 +19,10 @@ export default function BotConfig() {
         <CardContent className="divide-y p-5">
           <ConfigItem title={Locale.Bot.Config.Avatar}>
             <Popover open={showPicker}>
-              <PopoverTrigger onClick={() => setShowPicker(true)}>
-                <BotAvatar avatar={bot.avatar} />
-              </PopoverTrigger>
-              <PopoverContent align="end" className="w-fit">
-                <EmojiPicker
-                  lazyLoadEmojis
-                  theme={EmojiTheme.AUTO}
-                  getEmojiUrl={getEmojiUrl}
-                  onEmojiClick={(e) => {
-                    updateBot((bot) => (bot.avatar = e.unified));
-                    setShowPicker(false);
-                  }}
-                />
-              </PopoverContent>
+              <PopoverTrigger
+                onClick={() => setShowPicker(true)}
+              ></PopoverTrigger>
+              <PopoverContent align="end" className="w-fit"></PopoverContent>
             </Popover>
           </ConfigItem>
           <ConfigItem title={Locale.Bot.Config.Name}>
