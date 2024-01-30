@@ -93,7 +93,7 @@ const en = {
     Title: "Context Prompt Settings",
   },
   Share: {
-    Title: "Share Bot",
+    Title: "Share conversation",
     Url: {
       Title: "URL",
       Hint: "Use the URL to share your bot. The URL will be valid for 30 days.",
@@ -103,7 +103,7 @@ const en = {
   Bot: {
     Name: "Bot",
     Page: {
-      Search: (count: number) => `Search Bot - ${count} bots`,
+      Search: (count: number) => `Search Conversations - ${count} chats`,
       Create: "Create Conversation",
     },
     Item: {
