@@ -12,7 +12,10 @@ import {
   TextNode,
   VectorStoreIndex,
 } from "llamaindex";
-import { Message } from "ai";
+
+// export const runtime = 'edge'; // 'nodejs' is the default
+// export const dynamic = 'force-dynamic'; // static by default, unless reading the request
+export const maxDuration = 300; // max duration
 
 async function createIndex(
   serviceContext: ServiceContext,
@@ -60,7 +63,7 @@ function createReadableStream(
         // Extract response content from the OpenAI stream chunk
         const responseContent = chunk.text || "";
         // Write the response content to the response stream
-
+        console.log(`ProcessStream responseContent: ${responseContent}`);
         writer.write(
           encoder.encode(`data: ${JSON.stringify(responseContent)}\n\n`),
         );
@@ -127,10 +130,11 @@ async function checkAndWakeUpLargeModel(
     return false; // Indicates failure to check larger model stats
   }
 
-  const stats: { num_total_runners: number } = await statsResponse.json();
+  const stats: { backlog: number; num_total_runners: number } =
+    await statsResponse.json();
 
   // If no runners are available for the larger model, attempt to wake it up
-  if (stats.num_total_runners === 0) {
+  if (stats.backlog >= 1 || stats.num_total_runners === 0) {
     // Send "up" to the larger model without waiting for confirmation
     await fetch(bigModelUrl, {
       method: "POST",
@@ -268,9 +272,9 @@ export async function POST(request: NextRequest) {
       // This could involve updating your context-aware index or similar functionality
     }
 
-    const openai = new OpenAI({
-      apiKey: process.env.OPENAI_API_KEY,
-    });
+    // const openai = new OpenAI({
+    //   apiKey: process.env.OPENAI_API_KEY,
+    // });
 
     // Generate response using OpenAI
 

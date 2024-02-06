@@ -11,9 +11,7 @@ export enum FileName {
   Bots = "bots.json",
 }
 
-export const REQUEST_TIMEOUT_MS = 120000;
-
-export const COLD_START_TIMEOUT_MS = 60000;
+export const REQUEST_TIMEOUT_MS = 200000;
 
 export const CHAT_PAGE_SIZE = 15;
 export const MAX_RENDER_MSG_COUNT = 45;
