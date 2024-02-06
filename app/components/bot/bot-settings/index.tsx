@@ -27,10 +27,10 @@ export default function BotSettings(props: { extraConfigs?: JSX.Element }) {
       />
       <Separator />
       <BotConfig />
-      <ModelConfigList
+      {/* <ModelConfigList
         modelConfig={{ ...bot.modelConfig }}
         updateConfig={updateConfig}
-      />
+      /> */}
     </div>
   );
 }

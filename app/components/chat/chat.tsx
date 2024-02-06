@@ -20,7 +20,9 @@ import {
   Send,
   Trash,
   Undo2,
+  ShieldCheck,
 } from "lucide-react";
+
 import dynamic from "next/dynamic";
 import React, { useEffect, useMemo, useRef, useState } from "react";
 import { useDebouncedCallback } from "use-debounce";
@@ -130,6 +132,11 @@ function ChatHeader() {
       </div>
       <div className="text-center py-4">
         <Typography.H4>{bot.name}</Typography.H4>
+        {/* Encrypted Badge */}
+        <div className="flex justify-center items-center space-x-1">
+          <ShieldCheck className="text-success" />
+          <span className="text-success">End-to-End Encrypted</span>
+        </div>
         <div className="text-sm text-muted-foreground">
           {Locale.Chat.SubTitle(numberOfMessages)}
         </div>

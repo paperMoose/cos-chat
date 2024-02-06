@@ -6,11 +6,13 @@ import {
   ChatHistory,
   ChatMessage,
   IndexDict,
+  MessageType,
   ServiceContext,
   SimpleChatHistory,
   TextNode,
   VectorStoreIndex,
 } from "llamaindex";
+import { Message } from "ai";
 
 async function createIndex(
   serviceContext: ServiceContext,
@@ -56,13 +58,15 @@ function createReadableStream(
       for await (const chunk of stream) {
         if (aborted) break;
         // Extract response content from the OpenAI stream chunk
-        const responseContent = chunk.choices[0]?.delta?.content || "";
+        const responseContent = chunk.text || "";
         // Write the response content to the response stream
+
         writer.write(
           encoder.encode(`data: ${JSON.stringify(responseContent)}\n\n`),
         );
       }
       // Once the stream is finished
+
       writer.write(
         `data: ${JSON.stringify({
           done: true,
@@ -84,6 +88,102 @@ function createReadableStream(
 
   processStream();
   return responseStream.readable;
+}
+
+function createChatHistoryPrompt(messages: ChatMessage[]): string {
+  // Check if messages is defined and is an array
+  if (!Array.isArray(messages)) {
+    // Handle the undefined or incorrect type case, perhaps by logging an error or returning a default value
+    console.error(
+      "createChatHistoryPrompt was called with an undefined or non-array messages argument",
+    );
+    return ""; // Return an empty string or some default value as appropriate
+  }
+
+  return messages
+    .map(
+      (message) =>
+        `${message.role === "user" ? "User:" : "Assistant:"} ${
+          message.content
+        }`,
+    )
+    .join("\n");
+}
+
+async function* fetchCompletionAsStream(
+  userQuestion: string,
+  messages: ChatMessage[],
+) {
+  if (!Array.isArray(messages)) {
+    throw new Error(
+      "fetchCompletionAsStream was called with an undefined or non-array messages argument",
+    );
+  }
+  // const url: string = 'https://chatopensource--secure-tgi-mixtral-tiny.modal.run/completion/';
+  const url: string =
+    "https://chatopensource--vllm-mixtral.modal.run/completion/";
+  // const url: string = 'https://chatopensource--vllm-mixtral-quantized.modal.run/completion/';
+
+  // Format chat history
+  const messageHistory: string = createChatHistoryPrompt(messages);
+
+  // Prepare the data with both fields as strings
+  const data = {
+    question: userQuestion,
+    messageHistory: messageHistory,
+  };
+
+  // console.log(`Sending question: ${userQuestion}`);
+  // console.log(`Sending messageHistory: ${messageHistory}`);
+
+  const response = await fetch(url, {
+    method: "POST",
+    headers: {
+      Accept: "text/event-stream",
+      "Content-Type": "application/json",
+    },
+    body: JSON.stringify(data), // Convert the data to a JSON string for the POST body
+  });
+
+  if (!response.ok) {
+    throw new Error("Network response was not ok");
+  }
+
+  const reader = response.body?.getReader();
+  const decoder = new TextDecoder();
+
+  try {
+    if (reader) {
+      while (true) {
+        const { done, value } = await reader.read();
+        if (done) break;
+        const textChunk: string = decoder.decode(value, { stream: true });
+
+        // Split the chunk into individual SSE messages
+        const eventStrings = textChunk.split("\n\n");
+
+        for (const eventString of eventStrings) {
+          if (eventString.startsWith("data: ")) {
+            // Extract the JSON string from the SSE message
+            const jsonString = eventString.replace("data: ", "").trim();
+            if (jsonString) {
+              try {
+                // Parse the JSON string
+                const data = JSON.parse(jsonString);
+
+                yield data;
+              } catch (e) {
+                console.error("Error parsing JSON: ", e);
+                // If JSON parsing fails for one message, log the error and continue to the next
+              }
+            }
+          }
+        }
+      }
+    }
+  } finally {
+    reader?.releaseLock();
+  }
 }
 
 export async function POST(request: NextRequest) {
@@ -122,19 +222,34 @@ export async function POST(request: NextRequest) {
     });
 
     // Generate response using OpenAI
-    console.log(config.model);
-    console.log(config);
-    const stream = await openai.chat.completions.create({
-      model: config.model,
-      messages: [
-        { role: "user", content: message },
-        ...messages.map((msg) => ({
-          role: msg.role as "user" | "assistant",
-          content: msg.content,
-        })),
-      ],
-      stream: true,
-    });
+
+    // const stream = await openai.chat.completions.create({
+    //   model: config.model,
+    //   messages: [
+    //     { role: "user", content: message },
+    //     ...messages.map((msg) => ({
+    //       role: msg.role as "user" | "assistant",
+    //       content: msg.content,
+    //     })),
+    //   ],
+    //   stream: true,
+    // });
+    // Assuming 'messages' is an array of message objects with 'role' and 'content'
+    const last10Messages = messages.slice(-10); // Get only the last 10 messages
+
+    const chatMessages = [
+      { role: "user" as MessageType, content: message },
+      ...last10Messages.map((msg) => ({
+        role: msg.role as MessageType,
+        content: msg.content,
+      })),
+    ];
+    // console.log(chatMessages)
+    const stream = fetchCompletionAsStream(message, chatMessages);
+
+    // const chatHistory = new SimpleChatHistory({ messages: [] }); // Adapt as needed
+
+    // const readableStream = createReadableStream(stream, chatHistory);
 
     const readableStream = createReadableStream(
       stream,

@@ -17,14 +17,14 @@ export default function BotConfig() {
       <div className="font-semibold mb-2">{Locale.Bot.Config.Title}</div>
       <Card>
         <CardContent className="divide-y p-5">
-          <ConfigItem title={Locale.Bot.Config.Avatar}>
+          {/* <ConfigItem title={Locale.Bot.Config.Avatar}>
             <Popover open={showPicker}>
               <PopoverTrigger
                 onClick={() => setShowPicker(true)}
               ></PopoverTrigger>
               <PopoverContent align="end" className="w-fit"></PopoverContent>
             </Popover>
-          </ConfigItem>
+          </ConfigItem> */}
           <ConfigItem title={Locale.Bot.Config.Name}>
             <Input
               type="text"

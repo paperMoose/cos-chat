@@ -2,19 +2,20 @@ const en = {
   Chat: {
     SubTitle: (count: number) => `${count} messages`,
     Actions: {
-      ChatList: "Go To Chat List",
+      ChatList: "Go To Secure Chat List",
       Copy: "Copy",
       Delete: "Delete",
     },
     InputActions: {
       Stop: "Stop generating",
-      Clear: "Clear Context",
+      Clear: "Clear Chat History",
     },
     Typing: "Typing…",
     InputMobile: "Enter to send",
     Input:
-      "Enter to send, Shift + Enter to wrap, enter URLs to add a PDF or HTML document to the context",
-    Send: "Send",
+      // "Enter to send, Shift + Enter to wrap, enter URLs to add a PDF or HTML document to the context",
+      "Enter to send, Shift + Enter to wrap",
+    Send: "Send Encrypted",
     IsContext: "Contextual Prompt",
     LoadingURL: "Loading content...",
   },
@@ -88,7 +89,7 @@ const en = {
   },
   Context: {
     Add: "Add a Prompt",
-    Clear: "Context Cleared",
+    Clear: "Chat History Cleared",
     Revert: "Revert",
     Title: "Context Prompt Settings",
   },
@@ -103,7 +104,8 @@ const en = {
   Bot: {
     Name: "Bot",
     Page: {
-      Search: (count: number) => `Search Conversations - ${count} chats`,
+      Search: (count: number) =>
+        `Search Conversations - ${count} ${count > 1 ? "chats" : "chat"}`,
       Create: "Create Conversation",
     },
     Item: {
@@ -133,9 +135,8 @@ const en = {
 
   Welcome: {
     Title: "ChatOpenSource",
-    SubTitle: "AI Chat done securely 🔐",
-    Quote:
-      "“This tool has saved me countless hours of work and helped me apply AI features to my work faster than ever before.”",
+    SubTitle: "Hypersecure AI Chat 🔐",
+    Quote: "",
     LoginLinkedinTitle: "Login with LinkedIn",
   },
 };
