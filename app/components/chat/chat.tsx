@@ -582,6 +582,10 @@ export function Chat() {
             )}
           </div>
         </div>
+        <span className="text-center text-gray-400 block mt-2">
+          Chats are only accessible by their organizations and owners. We will
+          never train on your data.
+        </span>
       </div>
     </div>
   );

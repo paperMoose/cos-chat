@@ -119,10 +119,9 @@ async function* fetchCompletionAsStream(
       "fetchCompletionAsStream was called with an undefined or non-array messages argument",
     );
   }
-  // const url: string = 'https://chatopensource--secure-tgi-mixtral-tiny.modal.run/completion/';
+
   const url: string =
     "https://chatopensource--vllm-mixtral.modal.run/completion/";
-  // const url: string = 'https://chatopensource--vllm-mixtral-quantized.modal.run/completion/';
 
   // Format chat history
   const messageHistory: string = createChatHistoryPrompt(messages);
@@ -133,16 +132,20 @@ async function* fetchCompletionAsStream(
     messageHistory: messageHistory,
   };
 
-  // console.log(`Sending question: ${userQuestion}`);
-  // console.log(`Sending messageHistory: ${messageHistory}`);
+  // Assuming INFERENCE_API_KEY is stored as an environment variable
+  const apiKey = process.env.INFERENCE_API_KEY;
+  if (!apiKey) {
+    throw new Error('The environment variable "INFERENCE_API_KEY" is not set.');
+  }
 
   const response = await fetch(url, {
     method: "POST",
     headers: {
       Accept: "text/event-stream",
       "Content-Type": "application/json",
+      Authorization: `Bearer ${apiKey}`, // Add the Authorization header here
     },
-    body: JSON.stringify(data), // Convert the data to a JSON string for the POST body
+    body: JSON.stringify(data),
   });
 
   if (!response.ok) {
