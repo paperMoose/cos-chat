@@ -110,6 +110,43 @@ function createChatHistoryPrompt(messages: ChatMessage[]): string {
     .join("\n");
 }
 
+async function checkAndWakeUpLargeModel(
+  statsUrl: string,
+  bigModelUrl: string,
+  apiKey: string,
+): Promise<boolean> {
+  // Fetch the current model stats to check the availability of the larger model
+  const statsResponse = await fetch(statsUrl, {
+    headers: {
+      Authorization: `Bearer ${apiKey}`,
+    },
+  });
+
+  if (!statsResponse.ok) {
+    console.error("Failed to fetch model stats");
+    return false; // Indicates failure to check larger model stats
+  }
+
+  const stats: { num_total_runners: number } = await statsResponse.json();
+
+  // If no runners are available for the larger model, attempt to wake it up
+  if (stats.num_total_runners === 0) {
+    // Send "up" to the larger model without waiting for confirmation
+    await fetch(bigModelUrl, {
+      method: "POST",
+      headers: {
+        "Content-Type": "application/json",
+        Authorization: `Bearer ${apiKey}`,
+      },
+      body: JSON.stringify({ question: "up", messageHistory: "" }), // Special request to wake up the model
+    });
+
+    return false; // Indicate that the larger model had 0 runners and an attempt was made to wake it up
+  }
+
+  return true; // The larger model has runners and is considered ready
+}
+
 async function* fetchCompletionAsStream(
   userQuestion: string,
   messages: ChatMessage[],
@@ -120,8 +157,19 @@ async function* fetchCompletionAsStream(
     );
   }
 
-  const url: string =
+  // Define model URLs
+  const smallModelUrl =
+    "https://chatopensource--vllm-mistral-tiny.modal.run/completion/";
+  const bigModelUrl =
     "https://chatopensource--vllm-mixtral.modal.run/completion/";
+  const statsUrl = "https://chatopensource--vllm-mixtral.modal.run/stats";
+
+  const modelReady = await checkAndWakeUpLargeModel(
+    statsUrl,
+    bigModelUrl,
+    process.env.INFERENCE_API_KEY as string,
+  );
+  const modelUrl = modelReady ? bigModelUrl : smallModelUrl;
 
   // Format chat history
   const messageHistory: string = createChatHistoryPrompt(messages);
@@ -138,7 +186,7 @@ async function* fetchCompletionAsStream(
     throw new Error('The environment variable "INFERENCE_API_KEY" is not set.');
   }
 
-  const response = await fetch(url, {
+  const response = await fetch(modelUrl, {
     method: "POST",
     headers: {
       Accept: "text/event-stream",
